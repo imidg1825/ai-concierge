@@ -12,7 +12,7 @@ def extract_product_data(text: str) -> dict:
     - attributes
     """
 
-    text_lower = text.lower()
+    text_lower = text.lower().strip()
 
     result = {
         "category": None,
@@ -26,12 +26,45 @@ def extract_product_data(text: str) -> dict:
     # CATEGORY
     # --------------------------
     category_keywords = {
-        "телефон": ["телефон", "смартфон", "iphone", "samsung galaxy", "redmi"],
-        "ноутбук": ["ноутбук", "laptop", "macbook"],
-        "часы": ["часы", "watch", "apple watch"],
-        "велосипед": ["велосипед", "байк", "горный велосипед", "шоссейный велосипед"],
-        "диван": ["диван", "угловой диван", "раскладной диван"],
-        "стул": ["стул", "кресло", "табурет"],
+        "телефон": [
+            "телефон",
+            "смартфон",
+            "iphone",
+            "айфон",
+            "samsung galaxy",
+            "samsung",
+            "самсунг",
+            "redmi",
+            "xiaomi",
+        ],
+        "ноутбук": [
+            "ноутбук",
+            "laptop",
+            "macbook",
+            "макбук",
+        ],
+        "часы": [
+            "часы",
+            "watch",
+            "apple watch",
+            "эпл вотч",
+        ],
+        "велосипед": [
+            "велосипед",
+            "байк",
+            "горный велосипед",
+            "шоссейный велосипед",
+        ],
+        "диван": [
+            "диван",
+            "угловой диван",
+            "раскладной диван",
+        ],
+        "стул": [
+            "стул",
+            "кресло",
+            "табурет",
+        ],
     }
 
     for category, keywords in category_keywords.items():
@@ -46,10 +79,18 @@ def extract_product_data(text: str) -> dict:
     # BRAND
     # --------------------------
     brand_keywords = {
-        "Apple": ["apple", "iphone", "macbook", "apple watch"],
-        "Samsung": ["samsung", "galaxy"],
-        "Xiaomi": ["xiaomi", "redmi", "mi"],
-        "Huawei": ["huawei", "honor"],
+        "Apple": [
+            "apple",
+            "iphone",
+            "айфон",
+            "эпл",
+            "macbook",
+            "макбук",
+            "apple watch",
+        ],
+        "Samsung": ["samsung", "galaxy", "самсунг"],
+        "Xiaomi": ["xiaomi", "redmi", "mi", "сяоми"],
+        "Huawei": ["huawei", "honor", "хуавей", "хонор"],
         "Asus": ["asus"],
         "Lenovo": ["lenovo"],
         "Acer": ["acer"],
@@ -58,7 +99,7 @@ def extract_product_data(text: str) -> dict:
         "Trek": ["trek"],
         "Giant": ["giant"],
         "Merida": ["merida"],
-        "IKEA": ["ikea"],
+        "IKEA": ["ikea", "икеа"],
     }
 
     for brand, keywords in brand_keywords.items():
@@ -105,31 +146,50 @@ def extract_product_data(text: str) -> dict:
     # ATTRIBUTES: MODEL
     # --------------------------
     iphone_model_match = re.search(
-        r"(iphone\s*\d{1,2}(?:\s*(?:pro\s*max|pro|max|mini))?)",
+        r"((?:iphone|айфон)\s*\d{1,2}(?:\s*(?:pro\s*max|про\s*макс|pro|max|макс|mini|мини|pro|про))?)",
         text_lower,
     )
     if iphone_model_match:
         model = iphone_model_match.group(1)
         model = re.sub(r"\s+", " ", model).strip()
-        result["attributes"]["model"] = model.title().replace("Iphone", "iPhone")
+
+        model = (
+            model.replace("айфон", "iPhone")
+            .replace("iphone", "iPhone")
+            .replace("про макс", "Pro Max")
+            .replace("про", "Pro")
+            .replace("макс", "Max")
+            .replace("мини", "Mini")
+        )
+
+        result["attributes"]["model"] = model
 
     samsung_model_match = re.search(
-        r"(samsung\s+galaxy\s+[a-z]?\d{1,2}(?:\s*(?:ultra|plus|\+|fe))?)",
+        r"((?:samsung\s+galaxy|самсунг\s+галакси)\s+[a-zа-я]?\d{1,2}(?:\s*(?:ultra|plus|\+|fe))?)",
         text_lower,
     )
     if samsung_model_match and "model" not in result["attributes"]:
         model = samsung_model_match.group(1)
         model = re.sub(r"\s+", " ", model).strip()
-        result["attributes"]["model"] = model.title()
+        model = model.replace("самсунг галакси", "Samsung Galaxy").replace(
+            "samsung galaxy", "Samsung Galaxy"
+        )
+        result["attributes"]["model"] = model
 
     macbook_model_match = re.search(
-        r"(macbook\s+(?:air|pro)(?:\s*\d{2})?)",
+        r"((?:macbook|макбук)\s+(?:air|pro|эйр|про)(?:\s*\d{2})?)",
         text_lower,
     )
     if macbook_model_match and "model" not in result["attributes"]:
         model = macbook_model_match.group(1)
         model = re.sub(r"\s+", " ", model).strip()
-        result["attributes"]["model"] = model.title()
+        model = (
+            model.replace("макбук", "MacBook")
+            .replace("macbook", "MacBook")
+            .replace("эйр", "Air")
+            .replace("про", "Pro")
+        )
+        result["attributes"]["model"] = model
 
     # --------------------------
     # ATTRIBUTES: MEMORY
