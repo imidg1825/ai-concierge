@@ -85,28 +85,40 @@ OpenRouter API — генерация текста (LLM)
 Pydantic — валидация данных
 python-dotenv — работа с переменными окружения
 💻 Среда разработки
+
 Windows 10/11
 VS Code
+
 PowerShell
+
 Git / GitHub
+
 🚀 Как запустить проект
-# 1. Создать виртуальное окружение и активировать
+
+1. Создать виртуальное окружение и активировать
+
 python -m venv venv
 
-# Активировать (Windows)
+2.Активировать (Windows)
+
 venv\Scripts\activate
 
-# 2. Установить зависимости
+3. Установить зависимости
+
 pip install -r requirements.txt
 
-# 3. Создать файл .env (в корне проекта)
+4. Создать файл .env (в корне проекта)
+
 OPENROUTER_API_KEY=your_api_key_here
 
-# 4. Запустить сервер
+5. Запустить сервер
+
 uvicorn app.main:app --reload
 
-# 5. Открыть Swagger
+6. Открыть Swagger
+
 http://127.0.0.1:8000/docs
+
 👨‍💻 Автор
 
 Иван — QA Engineer и Developer
