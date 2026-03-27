@@ -77,16 +77,25 @@ backend должен быть запущен
 API адрес: http://127.0.0.1:8000
 
 🛠 Используемые технологии
+
 Python 3.14
+
 FastAPI — API сервер
+
 Uvicorn — запуск сервера
+
 requests — HTTP-запросы
+
 OpenRouter API — генерация текста (LLM)
+
 Pydantic — валидация данных
+
 python-dotenv — работа с переменными окружения
+
 💻 Среда разработки
 
 Windows 10/11
+
 VS Code
 
 PowerShell
@@ -99,7 +108,7 @@ Git / GitHub
 
 python -m venv venv
 
-2.Активировать (Windows)
+2. Активировать (Windows)
 
 venv\Scripts\activate
 
